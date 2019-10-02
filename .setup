@@ -1,7 +1,14 @@
 #!/bin/bash
 
+clear
+
 echo -e "\n\e[1m\e[4m\e[32mSourcing .bashrc\e[0m"
 . .bashrc
+echo done
+
+em "Updating and upgrading"
+sudo apt update
+sudo apt upgrade
 
 em "Installing APT packages"
 sudo apt install -y $(<apt_packages.txt)

@@ -1,3 +1,5 @@
 colormake
+npm
 ranger
+tldr
 tmux
