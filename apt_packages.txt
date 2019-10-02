@@ -1,2 +1,3 @@
 colormake
 ranger
+tmux
