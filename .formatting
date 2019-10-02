@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Set up shell formatting
+# Usage example: format "Some underlined green text" green underlined
+# Guide: https://misc.flogisoft.com/bash/tip_colors_and_formatting
+
+declare -A formats
+formats=(
+    [reset]=0
+    [bold]=1
+    [underlined]=4
+    [green]=32
+)
+
+function format ()
+{
+    str=$1
+    formats=${@:2}
+    fmtstr=""
+    for fmt in $formats
+    do
+        fmtstr="$fmtstr\e[${formats[$fmt]}m"
+    done
+    echo -e "$fmtstr$str\e[0m"
+}
+
+# Emphasize
+function em () {
+    format "\n$@" bold underlined green
+}
+
+function format_demo ()
+{
+    #Background
+    #for clbg in {40..47} {100..107} 49 ; do
+        #Foreground
+        for clfg in {30..37} {90..97} 39 ; do
+            #Formatting
+            for attr in 0 1 2 4 5 7 ; do
+                #Print the result
+                echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
+            done
+            echo #Newline
+        done
+    #done
+}

@@ -1,12 +1,12 @@
 # My environment
 Repository for personal environment configuration
 
-## External dependencies
+## Dependencies
 
 Software and utilities from third party providers
 
-```bash
-sudo apt install -y colormake
-```
-
 * [BAT](https://github.com/sharkdp/bat)
+
+## Setup
+
+    ./.setup

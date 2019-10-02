@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. .formatting
+
 # Aliases
 
 alias make="colormake"
