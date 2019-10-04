@@ -16,7 +16,7 @@ sudo apt update
 sudo apt upgrade
 
 em "Installing APT packages"
-sudo apt install -y $(<apt_packages.txt)
+sudo apt install -y $(<$HERE/apt_packages.txt)
 
 function addline () {
     # Add line to file only if it does not already exist

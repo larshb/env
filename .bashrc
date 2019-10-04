@@ -7,9 +7,12 @@ HERE=$(dirname $THIS)
 
 # Aliases
 
-alias make="colormake"
+alias lg="git log --all --graph --decorate --color --graph --oneline"
+alias st="git status ."
 alias cat="bat"
 alias src=". ~/.bashrc"
+alias lrc="open ~/.bashrc"
+alias make="colormake"
 alias path='echo $PATH | tr ":" "\n"'
 
 # TMUX
@@ -24,4 +27,19 @@ pathadd () {
     then
         export PATH="$1:$PATH"
     fi
+}
+
+backup_environment () {
+    cd $HERE
+    clear
+    git diff | cat
+    read -p "Update environment? [y/N]: " -n 1 -r
+    echo # new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        git commit . -m "Auto-update environemnt"
+        git pull
+        git push
+    fi
+    cd -
 }

@@ -1,5 +1,6 @@
 colormake
 npm
 ranger
+tig
 tldr
 tmux
