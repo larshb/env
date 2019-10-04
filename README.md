@@ -12,7 +12,3 @@ Software and utilities from third party providers
 Run the setup script.
 
     ./.setup
-
-Add the following line to `.bashrc`
-
-    . <PATH TO THIS REPOSITORY>/.bashrc
