@@ -12,23 +12,47 @@ echo -e "\n\e[1m\e[4m\e[32mSourcing .bashrc\e[0m"
 echo done
 
 em "Updating and upgrading"
-sudo apt update
+sudo apt update && \
 sudo apt upgrade
 
 em "Installing APT packages"
-sudo apt install -y $(<$HERE/apt_packages.txt)
+sudo apt install -y $(<$HERE/apt_packages.txt | grep -v "#")
 
+em "Downloading from Github"
+function github_amd64 () {
+    repo=$1
+    command=$2
+    [ -z "$(which $command)" ] && format "$command not found" yellow || format "$command already installed" blue; return
+    dl=$(\
+       	curl -s https://api.github.com/repos/sharkdp/bat/releases/latest | grep browser | grep amd64 | head -n 1 | cut -d '"' -f 4 \
+    )
+    if [ -z "$dl" ]; then
+        format "Unable to find release for $repo" red
+        return 1
+    fi
+    file=$(basename $dl)
+    [ -f "$file" ] && format "$file already downloaded" blue || format "Downloading $file" yellow
+    wget $dl
+    sudo dpkg -i $file
+    rm $file
+}
+github_amd64 sharkdp/bat bat
+
+em "Setting up environment"
 function addline () {
     # Add line to file only if it does not already exist
     FILE=$1
     LINE=${@:2}
     grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 }
-
-em "Setting up environment"
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
 addline "$HOME/.tmux.conf" "source-file $HERE/.tmux.conf"
 echo done
 
+
 em "Sourcing .bashrc again"
 . $HERE/.bashrc
+
+em "Sourcing .tmux.conf"
+tmux source-file $HERE/.tmux.conf
+
