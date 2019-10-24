@@ -8,18 +8,18 @@ HERE=$(dirname $THIS)
 # Aliases
 
 alias lg="git log --all --graph --decorate --color --graph --oneline"
-alias st="git status ."
+alias st="git status -uno ."
 alias cat="bat"
 alias src=". ~/.bashrc"
-alias lrc="open ~/.bashrc"
+#alias lrc="open ~/.bashrc"
 alias make="colormake"
 alias path='echo $PATH | tr ":" "\n"'
 
 # TMUX
-if [ -z "$TMUX" ]
-then
-    tmux attach -t default || tmux new -s default
-fi
+# if [ -z "$TMUX" ]
+# then
+#     tmux attach -t default || tmux new -s default
+# fi
 
 # PATH
 pathadd () {
