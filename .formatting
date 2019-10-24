@@ -9,7 +9,10 @@ formats=(
     [reset]=0
     [bold]=1
     [underlined]=4
+    [blink]=5
     [green]=32
+    [yellow]=33
+    [blue]=34
 )
 
 function format ()
