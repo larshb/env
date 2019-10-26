@@ -43,3 +43,5 @@ backup_environment () {
     fi
     cd -
 }
+
+pathadd ~/.local/bin

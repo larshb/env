@@ -43,6 +43,7 @@ function addline () {
     # Add line to file only if it does not already exist
     FILE=$1
     LINE=${@:2}
+    touch $FILE
     grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 }
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
