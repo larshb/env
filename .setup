@@ -48,6 +48,7 @@ function addline () {
 }
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
 addline "$HOME/.tmux.conf" "source-file $HERE/.tmux.conf"
+addline "$HOME/.vimrc" "source $HERE/.vimrc"
 echo done
 
 
