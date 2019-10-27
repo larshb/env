@@ -5,15 +5,7 @@ HERE=$(dirname $THIS)
 
 . $HERE/.formatting
 
-# Aliases
-
-alias lg="git log --all --graph --decorate --color --graph --oneline"
-alias st="git status -uno ."
-alias cat="bat"
-alias src=". ~/.bashrc"
-#alias lrc="open ~/.bashrc"
-alias make="colormake"
-alias path='echo $PATH | tr ":" "\n"'
+. .aliases
 
 # TMUX
 # if [ -z "$TMUX" ]

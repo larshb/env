@@ -3,22 +3,11 @@
 THIS=$(readlink -f $0)
 HERE=$(dirname $THIS)
 
-clear
+########################
+#   Helper functions   #
+########################
 
-TMUX=override
-
-echo -e "\n\e[1m\e[4m\e[32mSourcing .bashrc\e[0m"
-. $HERE/.bashrc
-echo done
-
-em "Updating and upgrading"
-sudo apt update && \
-sudo apt upgrade
-
-em "Installing APT packages"
-sudo apt install -y $(<$HERE/apt_packages.txt | grep -v "#")
-
-em "Downloading from Github"
+# Install package from Github Releases
 function github_amd64 () {
     repo=$1
     command=$2
@@ -36,9 +25,8 @@ function github_amd64 () {
     sudo dpkg -i $file
     rm $file
 }
-github_amd64 sharkdp/bat bat
 
-em "Setting up environment"
+# Add line to file if not already present
 function addline () {
     # Add line to file only if it does not already exist
     FILE=$1
@@ -46,6 +34,32 @@ function addline () {
     touch $FILE
     grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 }
+
+
+####################
+#   Setup Script   #
+####################
+
+clear
+
+TMUX=override
+
+echo -e "\n\e[1m\e[4m\e[32mSourcing .bashrc\e[0m"
+. $HERE/.bashrc
+echo done
+
+em "Updating and upgrading"
+sudo apt update && \
+sudo apt upgrade
+
+em "Installing APT packages"
+sudo apt install -y $(<$HERE/apt_packages.txt | grep -v "#")
+
+em "Downloading from Github"
+github_amd64 sharkdp/bat bat
+github_amd64 sharkdp/vivid vivid
+
+em "Setting up environment"
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
 addline "$HOME/.tmux.conf" "source-file $HERE/.tmux.conf"
 addline "$HOME/.vimrc" "source $HERE/.vimrc"

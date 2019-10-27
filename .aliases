@@ -1,0 +1,27 @@
+#!/bin/bash
+
+alias lg="git log --all --graph --decorate --color --graph --oneline"
+alias st="git status -uno ."
+alias cat="bat"
+alias src=". ~/.bashrc"
+#alias lrc="open ~/.bashrc"
+alias make="colormake"
+alias path='echo $PATH | tr ":" "\n"'
+
+# Direct git upload
+gup () {
+  git diff
+  git add .
+  st  # Only versioned files
+  read -r -p "Upload these changes? [y/N] " response
+  if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
+  then
+    printf "Commit message: "
+    read commit_message
+    git commit -a -m "$commit_message"
+    git push
+  else
+    echo "Cancelled"
+  fi
+}
+
