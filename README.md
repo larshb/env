@@ -11,4 +11,4 @@ Software and utilities from third party providers
 
 Run the setup script.
 
-    ./.setup
+    ./setup
