@@ -5,7 +5,7 @@ HERE=$(dirname $THIS)
 
 . $HERE/.formatting
 
-. .aliases
+. $HERE/.aliases
 
 # TMUX
 # if [ -z "$TMUX" ]
@@ -37,3 +37,7 @@ backup_environment () {
 }
 
 pathadd ~/.local/bin
+
+export LS_COLORS="$(vivid generate molokai)"  # sharkdp/vivid
+export LS_COLORS+=':ow=43;30'
+

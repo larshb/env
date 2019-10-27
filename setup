@@ -8,16 +8,33 @@ HERE=$(dirname $THIS)
 ########################
 
 # Install package from Github Releases
-function github_amd64 () {
+function install-github-release {
     repo=$1
-    command=$2
-    [ -z "$(which $command)" ] && format "$command not found" yellow || format "$command already installed" blue; return
-    dl=$(\
-       	curl -s https://api.github.com/repos/sharkdp/bat/releases/latest | grep browser | grep amd64 | head -n 1 | cut -d '"' -f 4 \
-    )
+    cmd=$2
+    arch=$3
+    if [ -z "$(which $cmd)" ]; then
+        format "$cmd not found" yellow
+    else
+        format "$cmd already installed" blue
+        return
+    fi
+    #dl=$(\
+    #  	curl -s https://api.github.com/repos/$repo/releases/latest | grep browser | grep amd64 | head -n 1 | cut -d '"' -f 4
+    #)
+    format "Installing $cmd from $repo for $arch" blue
+    latest=$(curl -s https://api.github.com/repos/$repo/releases/latest | grep browser | grep $arch | cut -d '"' -f 4)
+    altarr=($latest)
+    if [ ${#altarr[@]} -gt 1 ]; then
+        for line in ${altarr[@]}; do
+            format "  $(basename ${line})" blue
+        done
+    fi
+    dl=${altarr[0]}  # Use first match
     if [ -z "$dl" ]; then
         format "Unable to find release for $repo" red
         return 1
+    else
+        format "Using: $dl"
     fi
     file=$(basename $dl)
     [ -f "$file" ] && format "$file already downloaded" blue || format "Downloading $file" yellow
@@ -56,15 +73,14 @@ em "Installing APT packages"
 sudo apt install -y $(<$HERE/apt_packages.txt | grep -v "#")
 
 em "Downloading from Github"
-github_amd64 sharkdp/bat bat
-github_amd64 sharkdp/vivid vivid
+install-github-release sharkdp/bat bat amd64
+install-github-release sharkdp/vivid vivid amd64
 
 em "Setting up environment"
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
 addline "$HOME/.tmux.conf" "source-file $HERE/.tmux.conf"
 addline "$HOME/.vimrc" "source $HERE/.vimrc"
 echo done
-
 
 em "Sourcing .bashrc again"
 . $HERE/.bashrc
