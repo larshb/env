@@ -21,6 +21,14 @@ pathadd () {
     fi
 }
 
+md5 () {
+    ifile=$1
+    ofile=$ifile.md5
+    if [ "$ifile" == "" ]; then echo "Usage ${FUNCNAME[0]} <file>"; return 1; fi
+    echo "Writing MD5-sum to $ofile"
+    md5sum $ifile > $ofile
+}
+
 backup_environment () {
     cd $HERE
     clear
