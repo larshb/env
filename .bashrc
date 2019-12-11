@@ -35,8 +35,7 @@ retry () {
     call="$@"
     echo "Call: $call"
     for i in $(seq 1 $attempts); do
-        $call
-        if $?; then
+        if $call; then
             echo Success!
             return 0
         else
