@@ -29,6 +29,23 @@ md5 () {
     md5sum $ifile > $ofile
 }
 
+retry () {
+    let attempts=$1
+    shift
+    call="$@"
+    echo "Call: $call"
+    for i in $(seq 1 $attempts); do
+        $call
+        if $?; then
+            echo Success!
+            return 0
+        else
+            echo "Failed attempt $i"
+        fi
+    done
+    return 1
+}
+
 backup_environment () {
     cd $HERE
     clear
