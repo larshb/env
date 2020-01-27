@@ -6,4 +6,5 @@ ranger
 tig
 #tldr
 tmux
+ncdu
 

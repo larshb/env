@@ -65,3 +65,18 @@ pathadd ~/.local/bin
 export LS_COLORS="$(vivid generate molokai)"  # sharkdp/vivid
 export LS_COLORS+=':ow=43;30'
 
+session () {
+  if [ $# -lt 1 ]; then
+    echo -e "Resume or create TMUX session\n\nUsage: session <name>"
+    return 1
+  fi
+  name="$@"
+  if tmux ls | grep "$name"; then
+    echo Session \"$name\" found!
+    tmux a -t $name
+  else
+    echo No session \"$name\" found!
+    tmux new -s $name
+  fi
+}
+

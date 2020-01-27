@@ -3,6 +3,7 @@
 
                     " Indentation
 set expandtab 	    "  Tabs are spaces
+set tabstop=2       "  Tab size 2
 set shiftwidth=2    "  Size of indents in spaces
 set softtabstop=2   "  Simulate tabs with this many spaces
                     " Line numbers and mouse
