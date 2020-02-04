@@ -7,4 +7,5 @@ tig
 #tldr
 tmux
 ncdu
+tmux-plugin-manager
 

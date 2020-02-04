@@ -20,8 +20,8 @@ colorscheme slate   "  Use the slate theme
 set wildmenu        "  Show tab completions for commands inline
                     "  Files to ignore for various auto completion commands
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,__pycache__,node_modules
-nnoremap d          "  Remap the dd shortcut to not nuke whatever was in the yank buffer
-vnoremap d          "
+"nnoremap d          "  Remap the dd shortcut to not nuke whatever was in the yank buffer
+"vnoremap d          "
 
 fun! TrimWhitespace()
     let l:save = winsaveview()
