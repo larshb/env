@@ -12,3 +12,8 @@ Software and utilities from third party providers
 Run the setup script.
 
     ./setup
+
+Set up `tmux` plugins (Prefix is <kbd>Ctrl</kbd>+<kbd>A</kbd>)
+
+* Install: <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>I</kbd>
+* Update: <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>U</kbd>
