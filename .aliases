@@ -5,6 +5,7 @@ alias st="git status -uno ."
 alias cat="bat"
 alias src=". ~/.bashrc"
 #alias lrc="open ~/.bashrc"
+alias cd..="cd .."
 alias make="colormake"
 alias path='echo $PATH | tr ":" "\n"'
 alias quick="make -j"
