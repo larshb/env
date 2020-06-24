@@ -75,8 +75,10 @@ sudo apt install -y $(<$HERE/apt_packages.txt | grep -v "#")
 em "Downloading from Github"
 install-github-release sharkdp/bat bat amd64
 install-github-release sharkdp/vivid vivid amd64
+echo done
 
 em "Setting up environment"
+test -e ~/.tmux/plugins/tpm || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
 addline "$HOME/.tmux.conf" "source-file $HERE/.tmux.conf"
 addline "$HOME/.vimrc" "source $HERE/.vimrc"
@@ -84,7 +86,8 @@ echo done
 
 em "Sourcing .bashrc again"
 . $HERE/.bashrc
+echo done
 
-em "Sourcing .tmux.conf"
-tmux source-file $HERE/.tmux.conf
+#em "Sourcing .tmux.conf"
+#tmux source-file $HERE/.tmux.conf
 
