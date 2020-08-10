@@ -9,6 +9,7 @@ alias cd..="cd .."
 alias make="colormake"
 alias path='echo $PATH | tr ":" "\n"'
 alias quick="make -j"
+alias tmux-take="tmux a -d -t"
 
 # Direct git upload
 gup () {
