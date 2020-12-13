@@ -1,5 +1,6 @@
 # Packages to be installed with APT
 
+curl
 colormake
 npm
 ranger
