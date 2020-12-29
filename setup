@@ -52,6 +52,10 @@ function addline () {
     grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 }
 
+function ffs () {
+    format "failed" red
+    exit 1
+}
 
 ####################
 #   Setup Script   #
@@ -67,18 +71,30 @@ echo done
 
 em "Updating and upgrading"
 sudo apt update && \
-sudo apt upgrade
+sudo apt upgrade && \
+sudo apt autoremove || ffs
 
 em "Installing APT packages"
-sudo apt install -y $(<$HERE/apt_packages.txt | grep -v "#")
+sudo apt install -y $(<$HERE/apt_packages.txt) || ffs
 
 em "Downloading from Github"
 install-github-release sharkdp/bat bat amd64
 install-github-release sharkdp/vivid vivid amd64
+install-github-release cli/cli gh amd64
 echo done
 
+em "Installing Node packages"
+NVM_VER="0.37.2"
+touch ~/.bash_profile
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VER}/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install node
+npm install -g $(<$HERE/npm_packages.txt) || ffs
+#npm audit fix
+
 em "Setting up environment"
-test -e ~/.tmux/plugins/tpm || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+test -e ~/.tmux/plugins/tpm || \
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 addline "$HOME/.bashrc" ". $HERE/.bashrc"
 addline "$HOME/.tmux.conf" "source-file $HERE/.tmux.conf"
 addline "$HOME/.vimrc" "source $HERE/.vimrc"
