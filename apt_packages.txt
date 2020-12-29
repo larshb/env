@@ -1,12 +1,9 @@
-# Packages to be installed with APT
-
 curl
 colormake
-npm
 ranger
 tig
-#tldr
+tldr
 tmux
 ncdu
 tmux-plugin-manager
-
+pipenv
