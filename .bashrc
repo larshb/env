@@ -6,6 +6,7 @@ HERE=$(dirname $THIS)
 . $HERE/.formatting
 
 . $HERE/.aliases
+. $HERE/git_aliases.sh
 
 # TMUX
 # if [ -z "$TMUX" ]
