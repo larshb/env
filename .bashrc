@@ -46,6 +46,20 @@ retry () {
     return 1
 }
 
+dive () {
+    local path=$1
+    for i in {1..10}; do
+        if cd $path 2> /dev/null; then
+            return 0
+        fi
+        path="*/$path"
+    done
+    >&2 echo "$path not found"
+    return 1
+}
+
+alias dv=dive
+
 backup_environment () {
     cd $HERE
     clear
