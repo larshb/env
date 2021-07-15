@@ -85,7 +85,7 @@ echo done
 
 em "Installing Node packages"
 NVM_VER="0.37.2"
-touch ~/.bash_profile
+#touch ~/.bash_profile
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VER}/install.sh | bash
 . ~/.nvm/nvm.sh
 nvm install node
