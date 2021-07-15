@@ -10,6 +10,8 @@ alias make="colormake"
 alias path='echo $PATH | tr ":" "\n"'
 alias quick="make -j"
 alias tmux-take="tmux a -d -t"
+alias pip38="python3.8 -m pip"
+alias python38="python3.8"
 
 # Direct git upload
 gup () {
