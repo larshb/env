@@ -9,3 +9,4 @@ pipenv
 htop
 neofetch
 tree
+feh
