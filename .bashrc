@@ -1,6 +1,7 @@
 #!/bin/bash
 
-THIS=$BASH_SOURCE
+#THIS=$BASH_SOURCE
+THIS=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
 HERE=$(dirname $THIS)
 
 . $HERE/.formatting
@@ -78,7 +79,7 @@ backup_environment () {
 pathadd ~/.local/bin
 
 export LS_COLORS="$(vivid generate molokai)"  # sharkdp/vivid
-export LS_COLORS+=':ow=43;30'
+export LS_COLORS+=':ow=43;30' 2>/dev/null # Not relevant for zsh
 
 session () {
   if [ $# -lt 1 ]; then
@@ -94,4 +95,3 @@ session () {
     tmux new -s $name
   fi
 }
-

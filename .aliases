@@ -1,9 +1,12 @@
 #!/bin/bash
 
+THIS=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
+HERE=$(dirname $THIS)
+
 alias lg="git log --all --graph --decorate --color --graph --oneline"
 alias st="git status -uno ."
 alias cat="bat"
-alias src=". ~/.bashrc"
+alias src=". $HERE/.bashrc || true"
 #alias lrc="open ~/.bashrc"
 alias cd..="cd .."
 alias make="colormake"
@@ -14,7 +17,7 @@ alias pip38="python3.8 -m pip"
 alias python38="python3.8"
 
 # Direct git upload
-gup () {
+function gup () {
   git diff
   git add .
   st  # Only versioned files
@@ -31,7 +34,7 @@ gup () {
 }
 
 # Update Environment from Github
-update-environment () {
+function update-environment () {
   cd $HERE
   git pull && ./setup
   cd -
