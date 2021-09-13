@@ -28,5 +28,7 @@ fun! TrimWhitespace()
     %s/\s\+$//e
     call winrestview(l:save)
 endfun
-autocmd BufWritePre * :call TrimWhitespace() " Call TrimWhitespace on save
+" autocmd BufWritePre * :call TrimWhitespace() " Call TrimWhitespace on save
+
+hi Normal guibg=NONE ctermbg=NONE
 
