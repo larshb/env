@@ -1,19 +1,22 @@
 #!/bin/bash
 
-#THIS=$BASH_SOURCE
-THIS=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
+if [ -n "$ZSH_VERSION" ]; then
+   echo "This is zsh"
+   return 1
+elif [ -n "$BASH_VERSION" ]; then
+   : # OK
+else
+   echo "wtf shell is this?"
+   return 1
+fi
+
+THIS=$BASH_SOURCE
 HERE=$(dirname $THIS)
 
 . $HERE/.formatting
 
 . $HERE/.aliases
 . $HERE/git_aliases.sh
-
-# TMUX
-# if [ -z "$TMUX" ]
-# then
-#     tmux attach -t default || tmux new -s default
-# fi
 
 # PATH
 pathadd () {

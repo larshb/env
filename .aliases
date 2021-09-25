@@ -1,15 +1,12 @@
 #!/bin/bash
 
-THIS=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
-HERE=$(dirname $THIS)
-
 EDITOR=${EDITOR:-vim}
 BROWSER=${BROWSER:-surf}
 
 alias lg="git log --all --graph --decorate --color --graph --oneline"
 #alias st="git status -uno ." # Replaces suckless terminal
 alias cat="bat"
-alias src=". $HERE/.bashrc || true"
+alias src=". ~/.bashrc || true"
 #alias lrc="open ~/.bashrc"
 alias cd..="cd .."
 alias make="colormake"
@@ -37,12 +34,3 @@ function gup () {
     echo "Cancelled"
   fi
 }
-
-# Update Environment from Github
-function update-environment () {
-  cd $HERE
-  git pull && ./setup
-  cd -
-  src
-}
-

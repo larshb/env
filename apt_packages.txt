@@ -5,7 +5,6 @@ tig
 tmux
 ncdu
 tmux-plugin-manager
-pipenv
 htop
 neofetch
 tree
