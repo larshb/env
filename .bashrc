@@ -13,10 +13,9 @@ fi
 THIS=$BASH_SOURCE
 HERE=$(dirname $THIS)
 
-. $HERE/.formatting
-
-. $HERE/aliases
-. $HERE/git_aliases.sh
+. $HERE/bash/formatting
+. $HERE/bash/aliases
+. $HERE/bash/git_aliases
 
 # PATH
 pathadd () {
