@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Install package from Github Releases
+function install-github-release {
+    repo=$1
+    cmd=$2
+    arch=$3
+    if [ -z "$(which $cmd)" ]; then
+        format "$cmd not found" yellow
+    else
+        format "$cmd already installed" blue
+        return
+    fi
+    #dl=$(\
+    #  	curl -s https://api.github.com/repos/$repo/releases/latest | grep browser | grep amd64 | head -n 1 | cut -d '"' -f 4
+    #)
+    format "Installing $cmd from $repo for $arch" blue
+    latest=$(curl -s https://api.github.com/repos/$repo/releases/latest | grep browser | grep $arch | cut -d '"' -f 4)
+    altarr=($latest)
+    if [ ${#altarr[@]} -gt 1 ]; then
+        for line in ${altarr[@]}; do
+            format "  $(basename ${line})" blue
+        done
+    fi
+    dl=${altarr[0]}  # Use first match
+    if [ -z "$dl" ]; then
+        format "Unable to find release for $repo" red
+        return 1
+    else
+        format "Using: $dl"
+    fi
+    file=$(basename $dl)
+    [ -f "$file" ] && format "$file already downloaded" blue || format "Downloading $file" yellow
+    wget $dl
+    sudo dpkg -i $file
+    rm $file
+}
+
+# Add line to file if not already present
+function addline () {
+    # Add line to file only if it does not already exist
+    FILE=$1
+    LINE=${@:2}
+    touch $FILE
+    grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+}
+
+function ffs () {
+    format "failed" red
+    exit 1
+}
