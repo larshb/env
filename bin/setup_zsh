@@ -1,0 +1,66 @@
+#!/bin/bash
+
+THIS="bin/setup_zsh"
+
+set -e
+
+ESC=`printf "\e"`
+CSI=`printf "${ESC}["`
+RST=`printf "${CSI}0m"`
+BLD=`printf "${CSI}1m"`
+RED=`printf "${CSI}31m"`
+GRE=`printf "${CSI}32m"`
+BLU=`printf "${CSI}34m"`
+
+# Emphasize
+function em {
+  printf "${CSI}4;32m${@}${RST}\n"
+}
+
+# Note
+function note {
+  printf "${CSI}1;2;3;34m${@}${RST}\n"
+}
+
+function fail {
+  echo "${RED}${1}${RST}"
+  exit ${2:-1}
+}
+
+if ! test -f ${THIS}; then
+  fail "Please run script from repository root directory, not `pwd`"
+fi
+
+. bash/functions
+
+em "Note"
+echo "${BLD}Recommended font(s):${RST} ${BLU}https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k${RST}"
+
+em "Update APT"
+sudo apt update
+
+em "Installing zsh"
+sudo apt install -y zsh
+
+if test -d "${HOME}/.oh-my-zsh"
+then
+  note "Skipping oh-my-zsh"
+else
+  em "Installing oh-my-zsh"
+  ( sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" )
+fi
+
+P10K_DIR="${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k"
+if test -d ${P10K_DIR}
+then
+  note "Skipping powerlevel10k"
+else
+  em "Clone p10k"
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${P10K_DIR}
+fi
+
+em "Update ~/.zshrc"
+addline "${HOME}/.zshrc" "source ${P10K_DIR}/powerlevel10k.zsh-theme"
+
+em "(Re)start zsh"
+exec zsh
