@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -n "$ZSH_VERSION" ]; then
-   echo "This is zsh"
+   #echo "This is zsh"
    return 1
 elif [ -n "$BASH_VERSION" ]; then
    : # OK
