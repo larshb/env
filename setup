@@ -3,6 +3,7 @@
 #THIS=$(readlink -f $0)
 THIS=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
 HERE=$(dirname $THIS)
+ARCH=`dpkg --print-architecture`
 
 # --- Helper functions ---------------------------------------------------------
 . "${HERE}/bash/functions"
@@ -26,9 +27,9 @@ em "Installing APT packages"
 sudo apt install -y $(<$HERE/apt_packages.txt) || ffs
 
 em "Downloading from Github"
-install-github-release sharkdp/bat bat amd64
-install-github-release sharkdp/vivid vivid amd64
-install-github-release cli/cli gh amd64
+install-github-release sharkdp/bat bat $ARCH
+install-github-release sharkdp/vivid vivid $ARCH
+install-github-release cli/cli gh $ARCH
 echo done
 
 em "Installing Node packages"
