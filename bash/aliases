@@ -20,7 +20,8 @@ alias i3-config="$EDITOR ~/.config/i3/config"
 alias i3-refcard="$BROWSER https://i3wm.org/docs/refcard.html"
 
 # Direct git upload
-function gup () {
+gup ()
+{
   git diff
   git add .
   st  # Only versioned files
