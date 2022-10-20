@@ -36,3 +36,12 @@ gup ()
     echo "Cancelled"
   fi
 }
+
+# Update Environment from Github
+update-environment ()
+{
+  cd $HERE
+  git pull && ./setup
+  cd -
+  src
+}
