@@ -1,3 +1,5 @@
+#!/bin/bash
+
 alias gdi="git diff"
 alias gst="git status"
 alias gfe="git fetch"
