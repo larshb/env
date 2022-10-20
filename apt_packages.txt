@@ -10,3 +10,5 @@ htop
 neofetch
 tree
 feh
+lazygit
+ccze
