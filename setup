@@ -18,6 +18,9 @@ echo -e "\n\e[1m\e[4m\e[32mSourcing .bashrc\e[0m"
 . $HERE/.bashrc
 echo done
 
+em "Adding repositories"
+sudo add-apt-repository ppa:lazygit-team/release
+
 em "Updating and upgrading"
 sudo apt update && \
 sudo apt upgrade && \
