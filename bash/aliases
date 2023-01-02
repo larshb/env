@@ -3,6 +3,7 @@
 EDITOR=${EDITOR:-vim}
 BROWSER=${BROWSER:-surf}
 
+alias lc="ls -la --color=yes | less -R"
 alias lg="git log --all --graph --decorate --color --graph --oneline"
 #alias st="git status -uno ." # Replaces suckless terminal
 alias cat="bat"
