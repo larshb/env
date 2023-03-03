@@ -13,6 +13,8 @@ fi
 THIS=$BASH_SOURCE
 HERE=$(dirname $THIS)
 
+alias lrc="$EDITOR $THIS"
+
 . $HERE/bash/formatting
 . $HERE/bash/aliases
 . $HERE/bash/git_aliases
