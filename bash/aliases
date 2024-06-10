@@ -19,6 +19,7 @@ alias pip38="python3.8 -m pip"
 alias python38="python3.8"
 alias i3-config="$EDITOR ~/.config/i3/config"
 alias i3-refcard="$BROWSER https://i3wm.org/docs/refcard.html"
+alias swapflush="sudo swapoff -a; sudo swapon -a"
 
 # Direct git upload
 gup ()
