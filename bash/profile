@@ -1,0 +1,6 @@
+# ln -s $HOME/git/env/bash/profile .bash_profile
+
+if ! pgrep -x "xautolock" > /dev/null; then
+    echo "xautolock"
+    xautolock -time 4 -locker "$HOME/bin/lock" &
+fi

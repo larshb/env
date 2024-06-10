@@ -143,8 +143,10 @@ if [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
     alias ifconfig='colourify ifconfig'
 fi
 
+# --- Moved to profile ---
 # Use i3lock with custom config
 # xautolock -time 4 -locker "/home/larshb/bin/lock"
+# --- Moved to profile ---
 
 # Zoxide cd (with fzf)
 # TODO: Install script
