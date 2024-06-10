@@ -145,3 +145,7 @@ fi
 
 # Use i3lock with custom config
 # xautolock -time 4 -locker "/home/larshb/bin/lock"
+
+# Zoxide cd (with fzf)
+# TODO: Install script
+eval "$(zoxide init bash --cmd cd)"
