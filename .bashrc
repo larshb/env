@@ -142,3 +142,6 @@ if [ "$TERM" != dumb ] && [ -n "$GRC" ]; then
     alias getsebool='colourify getsebool'
     alias ifconfig='colourify ifconfig'
 fi
+
+# Use i3lock with custom config
+# xautolock -time 4 -locker "/home/larshb/bin/lock"
