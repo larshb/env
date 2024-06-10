@@ -9,3 +9,18 @@ alias gcm="git commit -m"
 alias gsp="git stash push --patch"
 alias gcam="git commit -a -m"
 alias gcmf="git commit --no-verify -m" # Commit without running pre-commit hook
+
+# Conveniently get back here
+SCRIPT="${BASH_SOURCE[0]}"
+_edit-git-aliases () {
+    if [ "$EDITOR" != "" ]; then
+        $EDITOR "$SCRIPT"
+    elif [ "$(command -v vim)" != "" ]; then
+        vim "$SCRIPT"
+    else
+        echo "$SCRIPT"
+        cat "$SCRIPT"
+    fi
+}
+alias edit-git-aliases="_edit-git-aliases"
+alias git-aliases="_edit-git-aliases"
