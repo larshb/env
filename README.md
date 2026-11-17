@@ -6,16 +6,13 @@ Personal shell, tmux and vim configuration for Ubuntu, for both bash and zsh.
 
     ./install            # everything
     ./install --dry-run  # show what would change
-    ./install links tmux # only some components
+    ./install links zsh  # only some components
     ./install --help
 
-Components: `config`, `links`, `packages`, `tmux`, `zsh`, `node`. Every step
+Components: `config`, `links`, `packages`, `zsh`, `node`. Every step
 is idempotent, so it is safe to re-run. `links` adds one `source` line to
 each of `~/.bashrc`, `~/.zshrc`, `~/.tmux.conf`, `~/.vimrc` and nvim's
 `init.vim`, and updates lines left over from older layouts of this repo.
-
-After the first run, install tmux plugins with <kbd>Ctrl</kbd>+<kbd>A</kbd>,
-<kbd>I</kbd> (update with <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>U</kbd>).
 
 ## Configuration
 
@@ -26,14 +23,8 @@ Machine-specific settings live outside the repo, in `~/.config/env/`
 | ----------------- | ---------------------------------------------------------- |
 | `config.sh`       | Settings for the shell and `./install`. See [`config.example.sh`](config.example.sh) |
 | `local.sh`        | Any extra shell setup; sourced last in bash and zsh        |
-| `tmux.local.conf` | tmux overrides: theme colours, extra plugins, shell        |
+| `tmux.local.conf` | tmux overrides                                             |
 | `vimrc.local`     | vim/nvim overrides                                         |
-
-Example `tmux.local.conf`:
-
-    set -g @env-accent colour25          # status bar + pane borders
-    set -g @env-accent-active colour39   # active pane border
-    set -g @plugin 'tmux-plugins/tmux-yank'
 
 ## Layout
 
