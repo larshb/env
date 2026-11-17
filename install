@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+# Set up this environment. Safe to re-run; every step is idempotent.
+set -euo pipefail
+
+ENV_HOME="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+ENV_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/env"
+. "$ENV_HOME/lib/ui.sh"
+
+ALL_COMPONENTS=(config links packages tmux zsh node)
+
+usage() {
+  cat <<EOF
+Usage: ./install [options] [component...]
+
+Components (default: all, in this order):
+  config     Create $ENV_CONFIG_DIR/config.sh from config.example.sh
+  links      Hook shell/tmux/vim configs into ~/.bashrc, ~/.zshrc, ~/.tmux.conf,
+             ~/.vimrc (and nvim, if it has no config of its own)
+  packages   apt install packages/apt.txt + \$ENV_APT_EXTRA
+  tmux       Install tpm (tmux plugin manager)
+  zsh        Install powerlevel10k unless ~/.zshrc already loads it
+  node       Install nvm + node, then npm packages/npm.txt + \$ENV_NPM_EXTRA
+
+Options:
+  -n, --dry-run   Print what would be done without changing anything
+  -u, --upgrade   Also run apt upgrade/autoremove in the packages step
+  -h, --help      Show this help
+EOF
+}
+
+DRY_RUN=0
+UPGRADE=0
+COMPONENTS=()
+while [ $# -gt 0 ]; do
+  case $1 in
+    -n|--dry-run) DRY_RUN=1 ;;
+    -u|--upgrade) UPGRADE=1 ;;
+    -h|--help) usage; exit 0 ;;
+    -*) usage >&2; die "Unknown option: $1" ;;
+    *)
+      [[ " ${ALL_COMPONENTS[*]} " == *" $1 "* ]] || die "Unknown component: $1"
+      COMPONENTS+=("$1") ;;
+  esac
+  shift
+done
+[ ${#COMPONENTS[@]} -gt 0 ] || COMPONENTS=("${ALL_COMPONENTS[@]}")
+
+# --- Settings (defaults, then user config) ------------------------------------
+ENV_APT_EXTRA=""
+ENV_NPM_EXTRA=""
+ENV_NODE_VERSION="node"
+ENV_P10K_DIR="$HOME/powerlevel10k"
+if [ -r "$ENV_CONFIG_DIR/config.sh" ]; then
+  set +u; . "$ENV_CONFIG_DIR/config.sh"; set -u
+fi
+
+# --- Helpers ------------------------------------------------------------------
+run() {
+  if [ "$DRY_RUN" = 1 ]; then info "[dry-run] $*"; else "$@"; fi
+}
+
+# Print non-comment words from a package list file
+read_list() { sed 's/#.*//' "$1" | tr -s '[:space:]' '\n' | sed '/^$/d'; }
+
+# Ensure LINE is in FILE. If a line equal to OLD exists (a stale path from an
+# earlier layout of this repo), replace it instead of appending.
+ensure_line() {
+  local file=$1 line=$2 old=${3:-}
+  if [ -f "$file" ] && grep -qxF -- "$line" "$file"; then
+    info "ok       $file"
+  elif [ -n "$old" ] && [ -f "$file" ] && grep -qxF -- "$old" "$file"; then
+    info "updated  $file"
+    [ "$DRY_RUN" = 1 ] && return
+    local tmp; tmp=$(mktemp)
+    awk -v old="$old" -v new="$line" '$0 == old { $0 = new } { print }' "$file" > "$tmp"
+    cat "$tmp" > "$file" && rm -f "$tmp"   # cat keeps permissions/symlinks
+  else
+    info "appended $file"
+    [ "$DRY_RUN" = 1 ] && return
+    mkdir -p "$(dirname "$file")"
+    printf '%s\n' "$line" >> "$file"
+  fi
+}
+
+# --- Components ---------------------------------------------------------------
+do_config() {
+  local cfg="$ENV_CONFIG_DIR/config.sh"
+  if [ -e "$cfg" ]; then
+    info "ok       $cfg"
+  else
+    info "created  $cfg"
+    run mkdir -p "$ENV_CONFIG_DIR"
+    run cp "$ENV_HOME/config.example.sh" "$cfg"
+  fi
+}
+
+do_links() {
+  ensure_line "$HOME/.bashrc"    ". $ENV_HOME/shell/init.bash"      ". $ENV_HOME/.bashrc"
+  ensure_line "$HOME/.tmux.conf" "source-file $ENV_HOME/tmux/tmux.conf" "source-file $ENV_HOME/.tmux.conf"
+  ensure_line "$HOME/.vimrc"     "source $ENV_HOME/vim/vimrc"       "source $ENV_HOME/.vimrc"
+  if command -v zsh >/dev/null || [ -f "$HOME/.zshrc" ]; then
+    ensure_line "$HOME/.zshrc" "source $ENV_HOME/shell/init.zsh"
+  fi
+  local nvim_dir="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+  if [ -f "$nvim_dir/init.lua" ]; then
+    info "skipped  $nvim_dir (has init.lua)"
+  else
+    ensure_line "$nvim_dir/init.vim" "source $ENV_HOME/vim/vimrc"
+  fi
+}
+
+do_packages() {
+  command -v apt-get >/dev/null || { warn "apt-get not found; skipping packages"; return; }
+  local pkgs
+  # shellcheck disable=SC2206
+  pkgs=($(read_list "$ENV_HOME/packages/apt.txt") $ENV_APT_EXTRA)
+  run sudo apt-get update
+  if [ "$UPGRADE" = 1 ]; then
+    run sudo apt-get upgrade -y
+    run sudo apt-get autoremove -y
+  fi
+  run sudo apt-get install -y "${pkgs[@]}"
+}
+
+do_tmux() {
+  local tpm="$HOME/.tmux/plugins/tpm"
+  if [ -d "$tpm" ]; then
+    info "ok       $tpm"
+  else
+    run git clone --depth=1 https://github.com/tmux-plugins/tpm "$tpm"
+    info "In tmux, press C-a I to install plugins"
+  fi
+}
+
+do_zsh() {
+  if [ -f "$HOME/.zshrc" ] && grep -q 'powerlevel10k.zsh-theme' "$HOME/.zshrc"; then
+    info "ok       powerlevel10k already loaded by ~/.zshrc"
+    return
+  fi
+  [ -d "$ENV_P10K_DIR" ] || \
+    run git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ENV_P10K_DIR"
+  ensure_line "$HOME/.zshrc" "source $ENV_P10K_DIR/powerlevel10k.zsh-theme"
+  info "Recommended font: https://github.com/romkatv/powerlevel10k#fonts"
+  [ "${SHELL##*/}" = zsh ] || info "Make zsh your login shell with: chsh -s \"\$(command -v zsh)\""
+}
+
+do_node() {
+  export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+  if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+    local tag
+    tag=$(curl -fsSL https://api.github.com/repos/nvm-sh/nvm/releases/latest |
+          sed -n 's/.*"tag_name": *"\([^"]*\)".*/\1/p')
+    [ -n "$tag" ] || die "Could not determine latest nvm release"
+    info "Installing nvm $tag"
+    if [ "$DRY_RUN" = 1 ]; then
+      info "[dry-run] curl .../nvm/$tag/install.sh | bash"
+    else
+      curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/$tag/install.sh" | bash
+    fi
+  fi
+  [ "$DRY_RUN" = 1 ] && [ ! -s "$NVM_DIR/nvm.sh" ] && return
+
+  set +u; . "$NVM_DIR/nvm.sh"
+  run nvm install "$ENV_NODE_VERSION"
+  set -u
+
+  local pkgs
+  # shellcheck disable=SC2206
+  pkgs=($(read_list "$ENV_HOME/packages/npm.txt") $ENV_NPM_EXTRA)
+  if [ ${#pkgs[@]} -gt 0 ]; then
+    run npm install -g "${pkgs[@]}"
+  fi
+}
+
+# --- Main ---------------------------------------------------------------------
+[ "$DRY_RUN" = 1 ] && warn "Dry run: nothing will be changed"
+for c in "${ALL_COMPONENTS[@]}"; do
+  [[ " ${COMPONENTS[*]} " == *" $c "* ]] || continue
+  section "$c"
+  "do_$c"
+done
+section "Done"
+info "Open a new shell (or run: src) to load changes"
