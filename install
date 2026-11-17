@@ -256,6 +256,12 @@ do_packages() {
   # shellcheck disable=SC2206
   apt+=($ENV_APT_EXTRA)
 
+  # Cargo apps need cargo; get it from apt unless it's already there (rustup)
+  export PATH="$HOME/.cargo/bin:$PATH"
+  if [ ${#cargo[@]} -gt 0 ] && ! command -v cargo >/dev/null; then
+    apt+=(cargo)
+  fi
+
   if ! command -v apt-get >/dev/null; then
     warn "apt-get not found; skipping apt packages"
   else
@@ -289,8 +295,8 @@ do_packages() {
     IFS=, read -ra pkgs <<< "${APP_PKGS[i]}"
     if command -v "$name" >/dev/null && [ "$UPGRADE" = 0 ]; then
       info "ok       $name (cargo; --upgrade to update)"
-    elif ! command -v cargo >/dev/null; then
-      warn "Skipping $name: needs cargo (https://rustup.rs)"
+    elif ! command -v cargo >/dev/null && [ "$DRY_RUN" = 0 ]; then
+      warn "Skipping $name: cargo is not available"
     else
       run cargo install --locked "${pkgs[@]}"
     fi

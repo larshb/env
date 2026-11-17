@@ -13,7 +13,7 @@ ENV_LS_THEME="${ENV_LS_THEME-molokai}"      # vivid theme for LS_COLORS; empty l
 ENV_LS_EXTRA="${ENV_LS_EXTRA-ow=43;30}"     # Appended to LS_COLORS (other-writable dirs)
 ENV_CAT_IS_BAT="${ENV_CAT_IS_BAT-1}"        # alias cat to bat/batcat when available
 ENV_GIT_ALIASES="${ENV_GIT_ALIASES-1}"      # gdi, gst, glo, gpr, ... (shell/git.sh)
-ENV_PATH_PREPEND="${ENV_PATH_PREPEND-$HOME/.local/bin}"  # Space-separated dirs put first in PATH
+ENV_PATH_PREPEND="${ENV_PATH_PREPEND-$HOME/.local/bin $HOME/.cargo/bin}"  # Dirs put first in PATH (if they exist)
 ENV_FZF="${ENV_FZF-1}"                      # fzf key bindings (Ctrl+R, Ctrl+T, Alt+C)
 ENV_ZOXIDE="${ENV_ZOXIDE-1}"                # zoxide: z / zi
 
