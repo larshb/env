@@ -16,8 +16,8 @@ each of `~/.bashrc`, `~/.zshrc`, `~/.tmux.conf`, `~/.vimrc` and nvim's
 
 ## Configuration
 
-Machine-specific settings live outside the repo, in `~/.config/env/`
-(`$XDG_CONFIG_HOME/env/` for the shell and vim files):
+Machine-specific settings live outside the repo, in `$XDG_CONFIG_HOME/env/`
+(default `~/.config/env/`):
 
 | File              | Purpose                                                    |
 | ----------------- | ---------------------------------------------------------- |
