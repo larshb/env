@@ -28,6 +28,13 @@ if [ "$ENV_ZOXIDE" = 1 ] && _have zoxide; then
   eval "$(zoxide init "$ENV_SHELL")"
 fi
 
+# imv: Ubuntu only ships imv-wayland / imv-x11
+if ! _have imv && _have imv-wayland; then
+  imv () {
+    if [ -n "$WAYLAND_DISPLAY" ]; then imv-wayland "$@"; else imv-x11 "$@"; fi
+  }
+fi
+
 # eza: extra listings; plain ls is left alone
 if _have eza; then
   alias ll='eza -l --git --group-directories-first'
