@@ -9,7 +9,8 @@ if ! _have fd && _have fdfind; then
 fi
 
 # fzf: Ctrl+R history, Ctrl+T files, Alt+C cd. Uses fd for file lists.
-if [ "$ENV_FZF" = 1 ] && _have fzf; then
+# Key bindings need a terminal (zsh warns "can't change option: zle" otherwise)
+if [ "$ENV_FZF" = 1 ] && [ -t 0 ] && _have fzf; then
   for _fd in fd fdfind; do
     if _have "$_fd"; then
       export FZF_DEFAULT_COMMAND="$_fd --type f --hidden --exclude .git"
