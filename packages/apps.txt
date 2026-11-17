@@ -10,6 +10,7 @@
 zsh        apt:zsh                  Z shell
 tmux       apt:tmux                 Terminal multiplexer
 curl       apt:curl                 Transfer data from URLs
+git        apt:git                  Version control (needed by the zsh and node steps)
 
 # Editors & viewers
 neovim     apt:neovim               Vim-based text editor
