@@ -2,17 +2,7 @@
 # which set ENV_HOME before sourcing this file. Must not print anything
 # (powerlevel10k instant prompt complains about console output).
 
-ENV_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/env"
-
-# --- Defaults (override in $ENV_CONFIG_DIR/config.sh) -------------------------
-ENV_EDITOR=""               # Empty: keep $EDITOR, else first of nvim/vim/vi
-ENV_LS_THEME="molokai"      # vivid theme for LS_COLORS; empty to leave alone
-ENV_LS_EXTRA="ow=43;30"     # Appended to LS_COLORS (other-writable dirs)
-ENV_CAT_IS_BAT=1            # alias cat to bat/batcat when available
-ENV_GIT_ALIASES=1           # Load shell/git.sh
-ENV_PATH_PREPEND="$HOME/.local/bin"  # Space-separated dirs to put first in PATH
-
-[ -r "$ENV_CONFIG_DIR/config.sh" ] && . "$ENV_CONFIG_DIR/config.sh"
+. "$ENV_HOME/settings.sh"   # Defaults + ~/.config/env/config.sh
 
 # --- Environment --------------------------------------------------------------
 . "$ENV_HOME/shell/functions.sh"

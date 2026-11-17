@@ -3,8 +3,8 @@
 set -euo pipefail
 
 ENV_HOME="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-ENV_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/env"
 . "$ENV_HOME/lib/ui.sh"
+set +u; . "$ENV_HOME/settings.sh"; set -u   # Defaults + ~/.config/env/config.sh
 
 ALL_COMPONENTS=(config packages links zsh node)
 
@@ -51,16 +51,6 @@ while [ $# -gt 0 ]; do
 done
 if [ ${#COMPONENTS[@]} -eq 0 ]; then
   if [ "$SELECT" = 1 ]; then COMPONENTS=(packages); else COMPONENTS=("${ALL_COMPONENTS[@]}"); fi
-fi
-
-# --- Settings (defaults, then user config) ------------------------------------
-ENV_APT_EXTRA="${ENV_APT_EXTRA:-}"
-ENV_NPM_EXTRA="${ENV_NPM_EXTRA:-}"
-ENV_NODE_VERSION="${ENV_NODE_VERSION:-node}"
-ENV_P10K_DIR="${ENV_P10K_DIR:-$HOME/powerlevel10k}"
-ENV_PICKER="${ENV_PICKER:-auto}"   # auto (whiptail if available), whiptail, text
-if [ -r "$ENV_CONFIG_DIR/config.sh" ]; then
-  set +u; . "$ENV_CONFIG_DIR/config.sh"; set -u
 fi
 
 # --- Helpers ------------------------------------------------------------------

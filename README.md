@@ -21,7 +21,7 @@ Machine-specific settings live outside the repo, in `$XDG_CONFIG_HOME/env/`
 
 | File              | Purpose                                                    |
 | ----------------- | ---------------------------------------------------------- |
-| `config.sh`       | Settings for the shell and `./install`. See [`config.example.sh`](config.example.sh) |
+| `config.sh`       | Settings for the shell and `./install`. All settings and defaults: [`settings.sh`](settings.sh) |
 | `local.sh`        | Any extra shell setup; sourced last in bash and zsh        |
 | `tmux.local.conf` | tmux overrides                                             |
 | `vimrc.local`     | vim/nvim overrides                                         |
@@ -29,7 +29,8 @@ Machine-specific settings live outside the repo, in `$XDG_CONFIG_HOME/env/`
 ## Layout
 
     install              setup script
-    config.example.sh    documented settings
+    settings.sh          all settings and their defaults
+    config.example.sh    template for ~/.config/env/config.sh
     shell/               init.bash, init.zsh -> common.sh, aliases, functions, git
     tmux/tmux.conf
     vim/vimrc            shared by vim and nvim
