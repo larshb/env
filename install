@@ -14,7 +14,7 @@ Usage: ./install [options] [component...]
 
 Components (default: all, in this order):
   config     Create $ENV_CONFIG_DIR/config.sh from config.example.sh
-  packages   apt install packages/apt.txt + \$ENV_APT_EXTRA
+  packages   Install apps from packages/apps.txt (apt, cargo) + \$ENV_APT_EXTRA
   links      Hook shell/tmux/vim configs into ~/.bashrc, ~/.zshrc, ~/.tmux.conf,
              ~/.vimrc (and nvim, if it has no config of its own)
   zsh        Install powerlevel10k unless ~/.zshrc already loads it
@@ -22,7 +22,7 @@ Components (default: all, in this order):
 
 Options:
   -n, --dry-run   Print what would be done without changing anything
-  -u, --upgrade   Also run apt upgrade/autoremove in the packages step
+  -u, --upgrade   Also apt upgrade/autoremove and update cargo apps
   -h, --help      Show this help
 EOF
 }
@@ -108,17 +108,63 @@ do_links() {
   fi
 }
 
+# Parse packages/apps.txt into parallel arrays
+APP_NAMES=() APP_SRC=() APP_PKGS=() APP_DESC=()
+load_apps() {
+  local name spec desc
+  while read -r name spec desc; do
+    case $name in ''|'#'*) continue ;; esac
+    [[ $spec == *:?* ]] || die "packages/apps.txt: bad source '$spec' for $name"
+    APP_NAMES+=("$name")
+    APP_SRC+=("${spec%%:*}")
+    APP_PKGS+=("${spec#*:}")
+    APP_DESC+=("$desc")
+  done < "$ENV_HOME/packages/apps.txt"
+}
+
+# Names of the apps to install
+selected_apps() { printf '%s\n' "${APP_NAMES[@]}"; }
+
 do_packages() {
-  command -v apt-get >/dev/null || { warn "apt-get not found; skipping packages"; return; }
-  local pkgs
+  load_apps
+  local -A want=()
+  local name i pkgs apt=() cargo=()
+  while read -r name; do [ -n "$name" ] && want[$name]=1; done < <(selected_apps)
+
+  for i in "${!APP_NAMES[@]}"; do
+    [ -n "${want[${APP_NAMES[i]}]:-}" ] || continue
+    IFS=, read -ra pkgs <<< "${APP_PKGS[i]}"
+    case ${APP_SRC[i]} in
+      apt)   apt+=("${pkgs[@]}") ;;
+      cargo) cargo+=("$i") ;;
+      *)     warn "Unknown source '${APP_SRC[i]}' for ${APP_NAMES[i]}" ;;
+    esac
+  done
   # shellcheck disable=SC2206
-  pkgs=($(read_list "$ENV_HOME/packages/apt.txt") $ENV_APT_EXTRA)
-  run sudo apt-get update
-  if [ "$UPGRADE" = 1 ]; then
-    run sudo apt-get upgrade -y
-    run sudo apt-get autoremove -y
+  apt+=($ENV_APT_EXTRA)
+
+  if ! command -v apt-get >/dev/null; then
+    warn "apt-get not found; skipping apt packages"
+  else
+    run sudo apt-get update
+    if [ "$UPGRADE" = 1 ]; then
+      run sudo apt-get upgrade -y
+      run sudo apt-get autoremove -y
+    fi
+    [ ${#apt[@]} -eq 0 ] || run sudo apt-get install -y "${apt[@]}"
   fi
-  run sudo apt-get install -y "${pkgs[@]}"
+
+  for i in "${cargo[@]}"; do
+    name=${APP_NAMES[i]}
+    IFS=, read -ra pkgs <<< "${APP_PKGS[i]}"
+    if command -v "$name" >/dev/null && [ "$UPGRADE" = 0 ]; then
+      info "ok       $name (cargo; --upgrade to update)"
+    elif ! command -v cargo >/dev/null; then
+      warn "Skipping $name: needs cargo (https://rustup.rs)"
+    else
+      run cargo install --locked "${pkgs[@]}"
+    fi
+  done
 }
 
 do_zsh() {

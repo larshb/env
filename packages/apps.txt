@@ -1,0 +1,42 @@
+# Apps installed by ./install packages
+#
+# Format:  <name>  <source>:<package>[,<package>...]  <description>
+# Sources: apt, cargo (cargo apps are skipped if cargo is not installed)
+#
+# Pick which ones to install with ./install --select. Add machine-specific
+# apt packages via ENV_APT_EXTRA in ~/.config/env/config.sh.
+
+# Shell & terminal
+zsh        apt:zsh                  Z shell
+tmux       apt:tmux                 Terminal multiplexer
+curl       apt:curl                 Transfer data from URLs
+
+# Editors & viewers
+neovim     apt:neovim               Vim-based text editor
+bat        apt:bat                  cat with syntax highlighting
+vivid      apt:vivid                LS_COLORS theme generator
+imv        apt:imv                  Image viewer (Wayland/X11)
+yazi       cargo:yazi-fm,yazi-cli   Terminal file manager
+
+# Search & navigation
+ripgrep    apt:ripgrep              Fast recursive grep (rg)
+fd         apt:fd-find              Fast find alternative (fd)
+fzf        apt:fzf                  Fuzzy finder (Ctrl+R, Ctrl+T)
+zoxide     apt:zoxide               Smarter cd that learns (z)
+eza        apt:eza                  Modern ls
+
+# Git
+tig        apt:tig                  Git history browser
+lazygit    apt:lazygit              Git TUI
+gh         apt:gh                   GitHub CLI
+delta      apt:git-delta            Syntax-highlighting diff pager
+
+# System
+btop       apt:btop                 System monitor
+ncdu       apt:ncdu                 Disk usage browser
+tree       apt:tree                 Directory tree listing
+fastfetch  apt:fastfetch            System info summary
+
+# Docs & output colouring
+tldr       apt:tealdeer             Command cheat sheets
+grc        apt:grc                  Colourise command output
