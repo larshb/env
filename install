@@ -17,7 +17,8 @@ Components (default: all, in this order):
   packages   Install the selected apps from packages/apps.txt (apt, cargo)
              + \$ENV_APT_EXTRA. Asks which apps to install on first run
   links      Hook shell/tmux/vim configs into ~/.bashrc, ~/.zshrc, ~/.tmux.conf,
-             ~/.vimrc (and nvim, if it has no config of its own)
+             ~/.vimrc, nvim (if it has no config of its own); set delta as
+             git pager if none is set
   zsh        Install powerlevel10k unless ~/.zshrc already loads it
   node       Install nvm + node, then npm packages/npm.txt + \$ENV_NPM_EXTRA
 
@@ -105,6 +106,16 @@ do_links() {
     info "skipped  $nvim_dir (has init.lua)"
   else
     ensure_line "$nvim_dir/init.vim" "source $ENV_HOME/vim/vimrc"
+  fi
+  # Use delta for git diffs, unless a pager is already configured
+  if command -v delta >/dev/null; then
+    if [ -n "$(git config --global --get core.pager || true)" ]; then
+      info "ok       git pager already set ($(git config --global --get core.pager))"
+    else
+      info "set      git pager to delta"
+      run git config --global core.pager delta
+      run git config --global interactive.diffFilter "delta --color-only"
+    fi
   fi
 }
 
