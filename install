@@ -263,7 +263,18 @@ do_packages() {
       run sudo apt-get upgrade -y
       run sudo apt-get autoremove -y
     fi
-    [ ${#apt[@]} -eq 0 ] || run sudo apt-get install -y "${apt[@]}"
+    # Skip packages this release doesn't have (e.g. lazygit on 24.04) rather
+    # than failing the whole install
+    local p avail=() missing=()
+    for p in "${apt[@]}"; do
+      if LC_ALL=C apt-cache policy "$p" 2>/dev/null | grep 'Candidate: [^(]' >/dev/null; then
+        avail+=("$p")
+      else
+        missing+=("$p")
+      fi
+    done
+    [ ${#missing[@]} -eq 0 ] || warn "Not available from apt here, skipping: ${missing[*]}"
+    [ ${#avail[@]} -eq 0 ] || run sudo apt-get install -y "${avail[@]}"
   fi
 
   for i in "${cargo[@]}"; do
