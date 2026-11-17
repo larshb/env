@@ -1,0 +1,30 @@
+# APT packages installed by ./install packages
+# One per line; '#' starts a comment. Add machine-specific ones via
+# ENV_APT_EXTRA in ~/.config/env/config.sh.
+
+# Shell & terminal
+zsh
+tmux
+curl
+
+# Editors & viewers
+neovim
+bat
+vivid
+ranger
+feh
+
+# Git
+tig
+lazygit
+gh
+
+# System
+htop
+ncdu
+tree
+fastfetch
+
+# Output colouring
+colormake
+ccze

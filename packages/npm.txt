@@ -1,0 +1,2 @@
+# Global npm packages installed by ./install node
+# One per line; '#' starts a comment. Add more via ENV_NPM_EXTRA.
