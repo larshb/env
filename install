@@ -6,7 +6,7 @@ ENV_HOME="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 ENV_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/env"
 . "$ENV_HOME/lib/ui.sh"
 
-ALL_COMPONENTS=(config links packages zsh node)
+ALL_COMPONENTS=(config packages links zsh node)
 
 usage() {
   cat <<EOF
@@ -14,9 +14,9 @@ Usage: ./install [options] [component...]
 
 Components (default: all, in this order):
   config     Create $ENV_CONFIG_DIR/config.sh from config.example.sh
+  packages   apt install packages/apt.txt + \$ENV_APT_EXTRA
   links      Hook shell/tmux/vim configs into ~/.bashrc, ~/.zshrc, ~/.tmux.conf,
              ~/.vimrc (and nvim, if it has no config of its own)
-  packages   apt install packages/apt.txt + \$ENV_APT_EXTRA
   zsh        Install powerlevel10k unless ~/.zshrc already loads it
   node       Install nvm + node, then npm packages/npm.txt + \$ENV_NPM_EXTRA
 
