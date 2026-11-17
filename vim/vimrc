@@ -1,0 +1,40 @@
+" Shared vim/neovim config. Add to ~/.vimrc:  source /path/to/env/vim/vimrc
+" Machine-specific overrides: ~/.config/env/vimrc.local
+
+" Indentation: 2 spaces
+set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType make setlocal noexpandtab softtabstop=0
+
+" UI
+set number
+set mouse=a
+set wildmenu
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,__pycache__,node_modules
+
+" Search
+set incsearch hlsearch
+
+" Colors (transparent background)
+syntax enable
+silent! colorscheme slate
+highlight Normal guibg=NONE ctermbg=NONE
+
+" :TrimWhitespace strips trailing whitespace, keeping cursor position
+function! s:TrimWhitespace() abort
+  let l:view = winsaveview()
+  keeppatterns %s/\s\+$//e
+  call winrestview(l:view)
+endfunction
+command! TrimWhitespace call s:TrimWhitespace()
+
+" Set g:env_trim_on_save = 1 in vimrc.local to trim on every write
+augroup env_trim
+  autocmd!
+  autocmd BufWritePre * if get(g:, 'env_trim_on_save', 0) | call s:TrimWhitespace() | endif
+augroup END
+
+let s:local = (empty($XDG_CONFIG_HOME) ? $HOME . '/.config' : $XDG_CONFIG_HOME)
+      \ . '/env/vimrc.local'
+if filereadable(s:local)
+  execute 'source' fnameescape(s:local)
+endif
