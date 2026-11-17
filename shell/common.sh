@@ -32,9 +32,11 @@ elif [ -z "$EDITOR" ]; then
 fi
 
 if [ -n "$ENV_LS_THEME" ] && command -v vivid >/dev/null 2>&1; then
-  LS_COLORS="$(vivid generate "$ENV_LS_THEME" 2>/dev/null)"
-  [ -n "$ENV_LS_EXTRA" ] && LS_COLORS="${LS_COLORS:+$LS_COLORS:}$ENV_LS_EXTRA"
-  export LS_COLORS
+  # Leave LS_COLORS alone if vivid fails (e.g. unknown theme)
+  if _ls=$(vivid generate "$ENV_LS_THEME" 2>/dev/null) && [ -n "$_ls" ]; then
+    export LS_COLORS="$_ls${ENV_LS_EXTRA:+:$ENV_LS_EXTRA}"
+  fi
+  unset _ls
 fi
 
 . "$ENV_HOME/shell/aliases.sh"
