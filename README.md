@@ -64,6 +64,8 @@ Machine-specific settings live outside the repo, in `$XDG_CONFIG_HOME/env/`
 | Command               | Does                                                |
 | --------------------- | --------------------------------------------------- |
 | `session <name>`      | Attach to tmux session, creating it if needed       |
+| (tmux) Ctrl+a `\|` / `-` | Split side by side / top and bottom             |
+| (tmux) Alt+arrow      | Move to the pane in that direction                  |
 | `dive <dir>` / `dv`   | `cd` into a directory up to 10 levels down          |
 | `retry <n> <cmd...>`  | Run a command up to n times until it succeeds       |
 | `gup`                 | Show diff, commit all tracked changes, push         |
