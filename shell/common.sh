@@ -31,6 +31,7 @@ fi
 
 . "$ENV_HOME/shell/aliases.sh"
 [ "$ENV_GIT_ALIASES" = 1 ] && . "$ENV_HOME/shell/git.sh"
+. "$ENV_HOME/shell/tools.sh"
 
 # Machine-specific additions that should load after everything else
 [ -r "$ENV_CONFIG_DIR/local.sh" ] && . "$ENV_CONFIG_DIR/local.sh"
