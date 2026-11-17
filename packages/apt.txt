@@ -11,20 +11,27 @@ curl
 neovim
 bat
 vivid
-ranger
-feh
+imv
+
+# Search & navigation
+ripgrep
+fd-find
+fzf
+zoxide
+eza
 
 # Git
 tig
 lazygit
 gh
+git-delta
 
 # System
-htop
+btop
 ncdu
 tree
 fastfetch
 
-# Output colouring
-colormake
-ccze
+# Docs & output colouring
+tealdeer
+grc
