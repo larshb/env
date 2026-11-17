@@ -18,5 +18,5 @@
 
 # Other files in ~/.config/env/ picked up automatically if present:
 #   local.sh          extra shell setup, sourced last (bash and zsh)
-#   tmux.local.conf   tmux overrides, e.g. set -g @env-accent colour25
+#   tmux.local.conf   tmux overrides, e.g. set -g status-style bg=colour25
 #   vimrc.local       vim overrides, e.g. let g:env_trim_on_save = 1
