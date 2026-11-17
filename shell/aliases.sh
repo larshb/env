@@ -1,5 +1,8 @@
 # General aliases (bash and zsh compatible)
 
+# GNU ls only uses LS_COLORS with --color. Ubuntu's default ~/.bashrc sets
+# this alias, but zsh has no equivalent default.
+alias ls='ls --color=auto'
 alias lc='ls -la --color=always | less -R'
 alias lg='git log --all --graph --decorate --oneline --color'
 alias path='echo "$PATH" | tr ":" "\n"'
