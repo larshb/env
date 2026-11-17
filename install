@@ -259,10 +259,16 @@ do_packages() {
   if ! command -v apt-get >/dev/null; then
     warn "apt-get not found; skipping apt packages"
   else
-    run sudo apt-get update
+    # --yes / no terminal: also stop package setup scripts from prompting
+    # (e.g. tzdata asking for a timezone)
+    local apt_get=(sudo apt-get)
+    if [ "$YES" = 1 ] || ! [ -t 0 ]; then
+      apt_get=(sudo env DEBIAN_FRONTEND=noninteractive apt-get)
+    fi
+    run "${apt_get[@]}" update
     if [ "$UPGRADE" = 1 ]; then
-      run sudo apt-get upgrade -y
-      run sudo apt-get autoremove -y
+      run "${apt_get[@]}" upgrade -y
+      run "${apt_get[@]}" autoremove -y
     fi
     # Skip packages this release doesn't have (e.g. lazygit on 24.04) rather
     # than failing the whole install
@@ -275,7 +281,7 @@ do_packages() {
       fi
     done
     [ ${#missing[@]} -eq 0 ] || warn "Not available from apt here, skipping: ${missing[*]}"
-    [ ${#avail[@]} -eq 0 ] || run sudo apt-get install -y "${avail[@]}"
+    [ ${#avail[@]} -eq 0 ] || run "${apt_get[@]}" install -y "${avail[@]}"
   fi
 
   for i in "${cargo[@]}"; do
