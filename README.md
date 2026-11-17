@@ -25,10 +25,14 @@ have are skipped with a warning.
 
 ### Trying it out
 
-    test/docker.sh             # fresh Ubuntu 26.04 container, then a zsh in it
-    test/docker.sh 24.04 --yes # other release / extra ./install arguments
+    test/docker.sh             # Ubuntu 26.04 container: install once, then zsh
+    test/docker.sh --select    # re-run ./install (any args) inside it
+    test/docker.sh 24.04 --yes # another release
+    test/docker.sh --fresh     # start over / --rm to delete it
 
-Nothing outside the container is touched; it is removed when you exit.
+The container is kept between runs, so later runs open a shell straight
+away. The repo is mounted read-only at `~/env`, so edits show up inside
+(`src` reloads). Nothing outside the container is touched.
 
 ## Configuration
 
