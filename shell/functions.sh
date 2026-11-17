@@ -73,7 +73,9 @@ gup () {
 
 # Pull this repo and re-run the installer
 env-update () {
-  (cd "$ENV_HOME" && git pull && ./install "$@") && src
+  # Not the `src` alias: aliases.sh loads after this file, and aliases are
+  # resolved when a function is defined
+  (cd "$ENV_HOME" && git pull && ./install "$@") && . ~/".${ENV_SHELL}rc"
 }
 
 # Commit and push local changes to this repo
