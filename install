@@ -149,9 +149,14 @@ do_node() {
   fi
   [ "$DRY_RUN" = 1 ] && [ ! -s "$NVM_DIR/nvm.sh" ] && return
 
-  set +u; . "$NVM_DIR/nvm.sh"
-  run nvm install "$ENV_NODE_VERSION"
-  set -u
+  # nvm is not written for strict mode: nvm.sh can return non-zero (e.g. when
+  # no default node exists yet), which would silently abort under set -e
+  local rc=0
+  set +euo pipefail
+  . "$NVM_DIR/nvm.sh"
+  run nvm install "$ENV_NODE_VERSION" || rc=$?
+  set -euo pipefail
+  [ "$rc" = 0 ] || die "nvm install $ENV_NODE_VERSION failed ($rc)"
 
   local pkgs
   # shellcheck disable=SC2206
