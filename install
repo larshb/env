@@ -313,7 +313,7 @@ do_packages() {
     elif ! command -v cargo >/dev/null && [ "$DRY_RUN" = 0 ]; then
       warn "Skipping $name: cargo is not available"
     else
-      run cargo install --locked "${pkgs[@]}"
+      run cargo install --locked --force "${pkgs[@]}"
     fi
   done
 }

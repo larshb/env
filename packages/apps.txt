@@ -17,7 +17,7 @@ neovim     apt:neovim               Vim-based text editor
 bat        apt:bat                  cat with syntax highlighting
 vivid      apt:vivid                LS_COLORS theme generator
 imv        apt:imv                  Image viewer (Wayland/X11)
-yazi       cargo:yazi-fm,yazi-cli   Terminal file manager
+yazi       cargo:yazi-build         Terminal file manager (builds yazi and ya)
 
 # Search & navigation
 ripgrep    apt:ripgrep              Fast recursive grep (rg)
