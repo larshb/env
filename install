@@ -256,10 +256,18 @@ do_packages() {
   # shellcheck disable=SC2206
   apt+=($ENV_APT_EXTRA)
 
-  # Cargo apps need cargo; get it from apt unless it's already there (rustup)
+  # Cargo apps are built with rustup's stable Rust in ~/.cargo; Ubuntu's
+  # cargo package is often too old for them (yazi needs a recent rustc)
   export PATH="$HOME/.cargo/bin:$PATH"
-  if [ ${#cargo[@]} -gt 0 ] && ! command -v cargo >/dev/null; then
-    apt+=(cargo)
+  local need_rust=0 get_rustup=0
+  for i in "${cargo[@]}"; do
+    if [ "$UPGRADE" = 1 ] || ! command -v "${APP_NAMES[i]}" >/dev/null; then
+      need_rust=1
+    fi
+  done
+  if [ "$need_rust" = 1 ] && ! command -v rustup >/dev/null; then
+    get_rustup=1
+    apt+=(curl build-essential)   # rustup installer; C linker for cargo
   fi
 
   if ! command -v apt-get >/dev/null; then
@@ -288,6 +296,13 @@ do_packages() {
     done
     [ ${#missing[@]} -eq 0 ] || warn "Not available from apt here, skipping: ${missing[*]}"
     [ ${#avail[@]} -eq 0 ] || run "${apt_get[@]}" install -y "${avail[@]}"
+  fi
+
+  if [ "$get_rustup" = 1 ]; then
+    run sh -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |
+      sh -s -- -y --no-modify-path --profile minimal"
+  elif [ "$need_rust" = 1 ] && [ "$UPGRADE" = 1 ]; then
+    run rustup update stable
   fi
 
   for i in "${cargo[@]}"; do

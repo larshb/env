@@ -1,7 +1,7 @@
 # Apps installed by ./install packages
 #
 # Format:  <name>  <source>:<package>[,<package>...]  <description>
-# Sources: apt, cargo (cargo itself is installed from apt when needed)
+# Sources: apt, cargo (built with Rust from rustup, installed when needed)
 #
 # Pick which ones to install with ./install --select. Add machine-specific
 # apt packages via ENV_APT_EXTRA in ~/.config/env/config.sh.
