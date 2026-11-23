@@ -72,7 +72,7 @@ Machine-specific settings live outside the repo, in `$XDG_CONFIG_HOME/env/`
 | `env-update`          | Pull this repo and re-run `./install`               |
 | `env-save`            | Commit and push changes to this repo                |
 | `lrc` / `src`         | Edit this repo / reload shell config                |
-| `z <dir>` / `zi`      | Jump to a frequent directory (zoxide)               |
+| `cd <part>` / `cdi`   | Jump to a frequent directory (zoxide; `z`/`zi` with `ENV_ZOXIDE_CMD=z`) |
 | Ctrl+R / Ctrl+T / Alt+C | fzf history search / insert file / cd             |
 | `ll` / `la` / `lt`    | eza long listing / with hidden / tree               |
 | `gdi gst gfe glo gpr gcm gsp` | git diff/status/fetch/log/pull --rebase/commit/stash -p |

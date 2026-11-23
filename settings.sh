@@ -15,7 +15,9 @@ ENV_CAT_IS_BAT="${ENV_CAT_IS_BAT-1}"        # alias cat to bat/batcat when avail
 ENV_GIT_ALIASES="${ENV_GIT_ALIASES-1}"      # gdi, gst, glo, gpr, ... (shell/git.sh)
 ENV_PATH_PREPEND="${ENV_PATH_PREPEND-$HOME/.local/bin $HOME/.cargo/bin}"  # Dirs put first in PATH (if they exist)
 ENV_FZF="${ENV_FZF-1}"                      # fzf key bindings (Ctrl+R, Ctrl+T, Alt+C)
-ENV_ZOXIDE="${ENV_ZOXIDE-1}"                # zoxide: z / zi
+ENV_ZOXIDE="${ENV_ZOXIDE-1}"                # zoxide directory jumping
+ENV_ZOXIDE_CMD="${ENV_ZOXIDE_CMD-cd}"       # Command name: cd replaces cd (+ cdi); z gives z / zi
+ENV_GRC="${ENV_GRC-1}"                      # Colour df, du, ps, ping, make, ... output with grc
 
 # --- ./install ----------------------------------------------------------------
 ENV_APT_EXTRA="${ENV_APT_EXTRA-}"           # Extra apt packages, space-separated

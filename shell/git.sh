@@ -6,4 +6,9 @@ alias gfe='git fetch'
 alias glo='git log --all --decorate --oneline --graph --color'
 alias gpr='git pull --rebase --autostash'
 alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+alias gcmf='git commit --no-verify -m'   # skip pre-commit hooks
 alias gsp='git stash push --patch'
+
+# Edit this file
+alias git-aliases='"$EDITOR" "$ENV_HOME/shell/git.sh"'

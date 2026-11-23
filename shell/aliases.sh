@@ -9,6 +9,7 @@ alias path='echo "$PATH" | tr ":" "\n"'
 alias cd..='cd ..'
 alias quick='make -j'
 alias tmux-take='tmux attach -d -t'
+alias swapflush='sudo swapoff -a && sudo swapon -a'   # move swapped pages back to RAM
 
 # Reload shell config / edit this repo
 alias src=". ~/.${ENV_SHELL}rc"

@@ -23,9 +23,20 @@ if [ "$ENV_FZF" = 1 ] && [ -t 0 ] && _have fzf; then
   eval "$(fzf --"$ENV_SHELL" 2>/dev/null)"
 fi
 
-# zoxide: z <part of dir name>, zi to pick interactively
+# zoxide: cd <part of dir name> jumps to a frequent match, cdi picks
+# interactively (z / zi with ENV_ZOXIDE_CMD=z). Plain cd paths work as usual.
 if [ "$ENV_ZOXIDE" = 1 ] && _have zoxide; then
-  eval "$(zoxide init "$ENV_SHELL")"
+  eval "$(zoxide init "$ENV_SHELL" --cmd "${ENV_ZOXIDE_CMD:-z}")"
+fi
+
+# grc: colourise common commands
+if [ "$ENV_GRC" = 1 ] && [ "$TERM" != dumb ] && _have grc; then
+  for _cmd in blkid df diff dig du fdisk findmnt free gcc g++ id ip \
+      iptables ld lsblk lsof lspci make mount netstat ping ps tail \
+      traceroute traceroute6; do
+    _have "$_cmd" && alias "$_cmd"="grc -es --colour=auto $_cmd"
+  done
+  unset _cmd
 fi
 
 # imv: Ubuntu only ships imv-wayland / imv-x11
