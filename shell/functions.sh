@@ -101,3 +101,10 @@ colors-demo () {
     done
   done
 }
+
+# For when the urge to rice returns
+rice () {
+  echo "The rice fields are closed. Last harvest: one purple status bar, tpm and"
+  echo "four plugins. Run colors-demo if you need to look at something pretty."
+  return 1
+}

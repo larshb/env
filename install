@@ -43,6 +43,10 @@ while [ $# -gt 0 ]; do
     -s|--select) SELECT=1 ;;
     -y|--yes) YES=1 ;;
     -h|--help) usage; exit 0 ;;
+    --rice)
+      info "We left the rice fields in 2023 and we are not going back."
+      info "No themes, no plugins. If you must: ~/.config/env/tmux.local.conf"
+      exit 0 ;;
     -*) usage >&2; die "Unknown option: $1" ;;
     *)
       [[ " ${ALL_COMPONENTS[*]} " == *" $1 "* ]] || die "Unknown component: $1"
